@@ -33,18 +33,19 @@ internal class Program
 
         n7.Insert(n10,"right");
 
-        n8.Insert(n12);
         n8.Insert(n11,"right");
 
-        //n2.Remove();
+        n9.Insert(n12);
 
+        //n2.Remove();
+        //n8.Remove();
         n1.Transverse("postorder");
 
         n1.Height();
 
         n1.Search(1);
 
-        n1.printTree();
+        n1.printTree2();
 
     }
 }
