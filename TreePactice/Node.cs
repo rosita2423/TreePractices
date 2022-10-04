@@ -10,6 +10,9 @@ namespace TreePactice
     public class xd
     {
         public Nullable <int>[] transverseList = new Nullable <int>[10];
+        public int save = 1;
+        public int saveTotal = 0;
+        public string [] levels = new string[10];
     }
     
     internal class Node
@@ -70,6 +73,7 @@ namespace TreePactice
         }
         public void Search(int nodeNumber)
         {
+            Console.WriteLine();
             if (1 == Search(this, nodeNumber))
             {
                 Console.WriteLine("Search result: Yes, there is the node number " + nodeNumber + ".");
@@ -126,6 +130,7 @@ namespace TreePactice
             Transverse(this, type);
 
             //Print trasnversed tree
+            Console.WriteLine();
             Console.Write("Transversed tree: (");
             for(int i=0;i < listOfNodes.transverseList.Length;i++)
             {
@@ -251,27 +256,27 @@ namespace TreePactice
                 }
             }
         }
-
+        public void Height()
+        {
+            Height(this);
+            Console.WriteLine();
+            Console.WriteLine("Your tree have "+ listOfNodes.saveTotal + " levels.");
+        }
         public void Height(Node node)
         {
-            for (int i = 1; i < 4; i++)
+            for (int i = 2; i < 4; i++)
             {
-                if (i == 1)
-                {
-                    for (int k = 0; k < listOfNodes.transverseList.Length; k++)
-                    {
-                        if (listOfNodes.transverseList[k] == null)
-                        {
-                            listOfNodes.transverseList[k] = node.data;
-                            break;
-                        }
-                    }
-                }
-                else if (i == 2)
+                if (i == 2)
                 {
                     if (node.elementLeft != null)
                     {
-                        Transverse(node.elementLeft, "preorder");
+                        listOfNodes.save = listOfNodes.save + 1;
+                        if (listOfNodes.save > listOfNodes.saveTotal)
+                        {
+                            listOfNodes.saveTotal = listOfNodes.save;
+                        }
+                        Height(node.elementLeft);
+                        listOfNodes.save = listOfNodes.save - 1;
                     }
 
                 }
@@ -279,7 +284,13 @@ namespace TreePactice
                 {
                     if (node.elementRight != null)
                     {
-                        Transverse(node.elementRight, "preorder");
+                        listOfNodes.save = listOfNodes.save + 1;
+                        if (listOfNodes.save > listOfNodes.saveTotal)
+                        {
+                            listOfNodes.saveTotal = listOfNodes.save;
+                        }
+                        Height(node.elementRight);
+                        listOfNodes.save = listOfNodes.save - 1;
                     }
                 }
             }
@@ -431,6 +442,15 @@ namespace TreePactice
             {
                 Console.Write(elementRight.elementRight.elementLeft.data);
             }
+            else
+            {
+                Console.Write(" ");
+            }
+            Console.Write("  ");
+            if (elementRight.elementRight.elementRight.data != null)
+            {
+                Console.Write(elementRight.elementRight.elementRight.data);
+            }
             //Console.WriteLine("     / \\      ");
             //Console.WriteLine("    2   3");
             //Console.WriteLine("   / \\ / \\");
@@ -438,5 +458,6 @@ namespace TreePactice
             //Console.WriteLine(" /");
             //Console.WriteLine("6");
         }
+        
     }
 }

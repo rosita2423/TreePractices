@@ -14,6 +14,10 @@ internal class Program
         Node n6 = new Node(6);
         Node n7 = new Node(7);
         Node n8 = new Node(8);
+        Node n9 = new Node(9);
+        Node n10 = new Node(10);
+        Node n11 = new Node(11);
+        Node n12 = new Node(12);
 
         n1.Insert(n2);
         n1.Insert(n3,"right");
@@ -25,14 +29,22 @@ internal class Program
         n3.Insert(n8,"right");
 
         n4.Insert(n6);
+        n4.Insert(n9,"right");
 
-        n2.Remove();
+        n7.Insert(n10,"right");
 
+        n8.Insert(n12);
+        n8.Insert(n11,"right");
+
+        //n2.Remove();
 
         n1.Transverse("postorder");
 
-        n1.Search(8);
-        //n1.printTree();
+        n1.Height();
+
+        n1.Search(1);
+
+        n1.printTree();
 
     }
 }
