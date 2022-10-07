@@ -9,11 +9,26 @@ namespace TreePactice
 {
     public class xd
     {
-        public Nullable <int>[] transverseList = new Nullable <int>[10];
+        public Nullable <int>[] transverseList = new Nullable <int>[15];
         public int save = 1;
         public int saveTotal = 0;
         public String [] levels = new String [10];
+        public String[] diagonals = new String[10];
         public int treeConstant = 0;
+        public bool left;
+        public bool right;
+
+        //Constructor
+        public int[] nodesSaved = new int [1];
+        public bool uniqueValue = false;
+
+        //new
+        public Nullable<int>[] intList = new Nullable<int>[16];
+        public List<Nullable<int>[]> intListTotal = new List<Nullable<int>[]>();
+        public int depness = 0;
+        public bool x = false;
+        public int diagonalLineSpaces = 0;
+        public int arrayPosition = 0;
     }
     
     internal class Node
@@ -21,39 +36,68 @@ namespace TreePactice
         public Nullable <int> data = null;
         public Node elementLeft = null;
         public Node elementRight = null;
-        int variableX;
+        int depnessX;
         private int save;
 
         //Constructor
         public Node(int nodeData)
         {
-            data = nodeData;
+            listOfNodes.uniqueValue = true;
+            for (int i = 0; i < listOfNodes.nodesSaved.Length; i++)
+            {
+                if (nodeData == listOfNodes.nodesSaved[i])
+                {
+                    listOfNodes.uniqueValue = false;
+                    break;
+                }
+            }
+            if (listOfNodes.uniqueValue == true)
+            {
+                data = nodeData;
+            }
+            else
+            {
+                Console.WriteLine("You cannot add a non-unique value");
+            }
+            
         }
         xd listOfNodes = new xd();
+
+        //Insert a new node into the tree
         public void Insert(Node newNode) { 
-        if (elementLeft == null)
-                {
-                    elementLeft = newNode;
-                }
-        }
-        public void Insert(Node newNode, string direction)
-            {
-            if(direction == "left")
+            if (newNode != null)
             {
                 if (elementLeft == null)
                 {
                     elementLeft = newNode;
                 }
-                
             }
-            else if(direction == "right")
+        
+        }
+        public void Insert(Node newNode, string direction)
+        {
+            if (newNode.data != null)
             {
-                if(elementRight == null)
+                if (direction == "left")
                 {
-                    elementRight = newNode;
+                    if (elementLeft == null)
+                    {
+                        elementLeft = newNode;
+                    }
+
                 }
-                
+                else if (direction == "right")
+                {
+                    if (elementRight == null)
+                    {
+                        elementRight = newNode;
+                    }
+
+                }
             }
+            else
+            {
+                Console.WriteLine("You cannot add an invalid node.");            }
         }
         public void Remove()
         {
@@ -71,6 +115,38 @@ namespace TreePactice
             data = null;
             
         }
+
+        //Remove a node
+        public void RemoveDefinitive(Node node)
+        {
+            RemoveDefinitive2(node);
+            if (node == this.elementLeft)
+            {
+                Console.WriteLine("xdd");
+                elementLeft = null;
+            }
+            else if (node == this.elementRight)
+            {
+                Console.WriteLine("xdd");
+                elementRight = null;
+            }
+        }
+        public void RemoveDefinitive2(Node node)
+        {
+            if (node.elementLeft != null)
+            {
+                node.elementLeft.RemoveDefinitive2(node.elementLeft);
+                node.elementLeft = null;
+            }
+            if (node.elementRight != null)
+            {
+                node.elementRight.RemoveDefinitive2(node.elementRight);
+                node.elementRight = null;
+            }
+
+            node.data = null;
+        }
+        
         public void Search(int nodeNumber)
         {
             Console.WriteLine();
@@ -124,11 +200,9 @@ namespace TreePactice
             }
             return null;
         }
-        public Node SearchWithReturn(string nodeNumber)
+        public Node SearchWithReturn(int nodeNumber)
         {
-            save = Int16.Parse(nodeNumber);
-            Console.WriteLine();
-            Node node = SearchWithReturn(this, save);
+            Node node = SearchWithReturn(this, nodeNumber);
             
             return node;
         }
@@ -138,41 +212,32 @@ namespace TreePactice
             {
                 return null;
             }
-            for (int i = 1; i < 4; i++)
+            if (node.data == nodeNumber)
             {
-                if (i == 1)
-                {
-                    if (node.elementLeft != null)
-                    {
-                        if (1 == Search(node.elementLeft, nodeNumber))
-                        {
-                            return node.elementLeft;
-                        }
-                    }
+                Node find = node;
+                return find;
+            }
 
-                }
-                else if (i == 2)
+            if (node.elementLeft != null)
+            {
+                if (null != SearchWithReturn(node.elementLeft, nodeNumber))
                 {
-                    if (nodeNumber == node.data)
-                    {
-                        return node;
-                    }
-                }
-                else if (i == 3)
-                {
-                    if (node.elementRight != null)
-                    {
-                        if (1 == Search(node.elementRight, nodeNumber))
-                        {
-                            return node;
-                        }
-                    }
-
+                    Node find = SearchWithReturn(node.elementLeft, nodeNumber);
+                    return find;
                 }
             }
+
+            if (node.elementRight != null)
+            {
+                if (null != SearchWithReturn(node.elementRight, nodeNumber))
+                {
+                    Node find = SearchWithReturn(node.elementRight, nodeNumber);
+                    return find;
+                }
+            }
+ 
             return null;
         }
-        
         public void Transverse(string type)
         {
             //Transverse nodes and saving them on an array
@@ -514,33 +579,91 @@ namespace TreePactice
         }
         public void printTree2()
         {
+            //Insert the nodes into a list organized by levels.
             printTree2(this);
-            Node node = null;
-            variableX = 0;
+
+            //depness to manage the first spaces of every line.
+            depnessX = -1;
+
+            //Rock "n" roll
+            //Tranverse all the levels (items on list of nodes).
             for (int i = 0; i < listOfNodes.levels.Length; i++)
             {
-                for (int k = 0; k< HeightWithReturn()+variableX;k++)
+                
+                //Print all the first spaces in the lines.
+                for (int k = 0; k< HeightWithReturn()+depnessX;k++)
                 {
-                    Console.Write(" ");
+                    Console.Write("  ");
                 }
-                variableX = variableX - 1;
+                
+
+                //Print the nodes of the current level on its respective space.
                 if (listOfNodes.levels[i] != null)
                 {
                     for (int k = 0; k< listOfNodes.levels[i].Length;k++)
                     {
-                        //node = SearchWithReturn(listOfNodes.levels[i][k]);
                         Console.Write(listOfNodes.levels[i][k]+" ");
                     }
-                    
                 }
+                Console.WriteLine();
+
+                //
+                for (int l = 0; l < HeightWithReturn()+ depnessX; l++)
+                {
+                    if (l == HeightWithReturn()+depnessX-1)
+                    {
+                        for (int k = 0; k < listOfNodes.levels[l].Length; k++)
+                        {
+                            if(Char.ToString(listOfNodes.levels[l][k]) != " ")
+                            {
+                                //Node node = SearchWithReturn(Char.ToString(listOfNodes.levels[l][k]));
+                                //if (node != null)
+                                //{
+                                //    if (node.elementLeft != null)
+                                //    {
+                                //        Console.Write(" /");
+                                //    }
+                                //    else
+                                //    {
+                                //        Console.Write("  ");
+                                //    }
+
+                                //    if (node.elementRight != null)
+                                //    {
+                                //        Console.Write(" \\");
+                                //    }
+                                //    else
+                                //    {
+                                //        Console.Write("  ");
+                                //    }
+                                //}
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    else
+                    {
+                        Console.Write("  ");
+                    }
+                }
+                depnessX = depnessX - 1;
+                //depnessX = depnessX - 1;
                 Console.WriteLine();
             }
         }
         public void printTree2(Node node)
         {
-
+            if (listOfNodes.left==true)
+            {
+                listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + " ";
+            } else if (listOfNodes.right == true){
+                listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + " ";
+            }
             listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + node.data;
-
+            listOfNodes.left = false;
+            listOfNodes.right = false;
             node.HeightWithReturn();
             if (node.elementLeft != null)
             {
@@ -549,7 +672,7 @@ namespace TreePactice
             }
             else
             {
-                listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant]+ " ";
+                listOfNodes.left = true;
             }
             if (node.elementRight != null)
             {
@@ -558,9 +681,238 @@ namespace TreePactice
             }
             else
             {
-                listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + " ";
+                listOfNodes.right = true;
             }
             listOfNodes.treeConstant = listOfNodes.treeConstant - 1;
+        }
+        public void printTreeDefinitive()
+        {
+            for (int i = 0; i < HeightWithReturn()+1;i++)
+            {
+                Nullable<int>[] intList2 = new Nullable<int>[15];
+                listOfNodes.intListTotal.Add(intList2);
+
+            }
+
+            printTreeDefinitive(this);
+
+            bool exchange = true;
+            for (int level = 0; level < HeightWithReturn(); level++)
+            {
+                //Print the first spaces
+                for (int k = 0; k < HeightWithReturn() - listOfNodes.diagonalLineSpaces + 1; k++)
+                {
+                    Console.Write("  ");
+                }
+                while (listOfNodes.intListTotal[level][listOfNodes.arrayPosition] != null)
+                {
+                    if (exchange == false)
+                    {
+                        Console.Write("(");
+                        Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] + ", ");
+                        exchange = true;
+                    }
+                    else
+                    {
+                        Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition]+") ");
+                        exchange = false;
+                    }
+                    
+                    listOfNodes.arrayPosition++;
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+                listOfNodes.arrayPosition = 0;
+                listOfNodes.diagonalLineSpaces = listOfNodes.diagonalLineSpaces + 1;
+            }
+                /*
+                bool first = true;
+                //This for is transverse the levels
+                for (int level = 0; level< HeightWithReturn(); level++) 
+                {
+
+                    //Print the first spaces
+                    for (int k = 0; k < HeightWithReturn() - listOfNodes.diagonalLineSpaces + 1; k++)
+                    {
+                        Console.Write("  ");
+                    }
+
+
+                    //Print the nodes
+                    //Transverse each node on the level
+                    while (listOfNodes.intListTotal[level][listOfNodes.arrayPosition] != null)
+                    {
+                        //First time
+                        if (first == true)
+                        {
+                            Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition]);
+                            first = false;
+
+                            Console.WriteLine();
+                            Node node = SearchWithReturn(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] ?? default(int));
+
+                            //Print the diagonals
+                            for (int k = 0; k < HeightWithReturn() - listOfNodes.diagonalLineSpaces + 1; k++)
+                            {
+                                if (k == HeightWithReturn())
+                                {
+                                    Console.Write(" ");
+                                }
+                                else
+                                {
+                                    Console.Write("  ");
+                                }
+                            }
+                            if (returning(node,"left") == true)
+                            {
+                                Console.Write("/ ");
+                            }
+                            else
+                            {
+                                Console.Write("  ");
+                            }
+                            if (returning(node, "right") == true)
+                            {
+                                Console.Write("\\");
+                            }
+                            else
+                            {
+                                Console.Write(" ");
+                            }
+
+                        }
+                        else //all times
+                        {
+                            //Node node = SearchWithReturn(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] ?? default(int));
+                            ////if (returning())
+                            //if (returning(node,"left") == true)
+                            //{
+                            //    Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition]);
+                            //}
+                            //else
+                            //{
+                            //    Console.Write("   ");
+                            //}
+                            //if (returning(node,"right")== true)
+                            //{
+
+                            //}
+                            Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] + "   ");
+                            //Console.WriteLine();
+                        }
+
+                        listOfNodes.arrayPosition++;
+                    }
+                    listOfNodes.arrayPosition = 0;
+
+                    Console.WriteLine();
+                    listOfNodes.diagonalLineSpaces = listOfNodes.diagonalLineSpaces + 1;
+                }
+
+                for (int i = 0; i < listOfNodes.intListTotal.Count; i++)
+                {
+                    for (int k = 0; k < listOfNodes.intListTotal[i].Length; k++)
+                    {
+                        Console.Write(listOfNodes.intListTotal[i][k]);
+                    }
+                    Console.WriteLine();
+                }
+                */
+            }
+
+        public void printDiagonals(Node node)
+        {
+            Console.WriteLine(node.HeightWithReturn());
+            for (int i = 0; i < node.HeightWithReturn();i++)
+            {
+
+            }
+        }
+        public bool returning(Node node, string side)
+        {
+            if (side == "right")
+            {
+                if (node.elementRight != null)
+                {
+                    return true;
+                }
+            }
+            if (side == "left")
+            {
+                if (node.elementLeft != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void printTreeDefinitive(Node node)
+        {
+            if (node.elementLeft != null)
+            {
+                listOfNodes.depness = listOfNodes.depness + 1;
+                printTreeDefinitive(node.elementLeft);
+                listOfNodes.depness = listOfNodes.depness - 1;
+            }
+            else
+            {
+                listOfNodes.depness = listOfNodes.depness + 1;
+
+                int h = 0;
+                while (listOfNodes.x == false)
+                {
+                    if (listOfNodes.intListTotal[listOfNodes.depness][h] == null)
+                    {
+                        listOfNodes.intListTotal[listOfNodes.depness][h] = 0;
+                        listOfNodes.x = true;
+                    }
+                    h = h + 1;
+                }
+                listOfNodes.x = false;
+
+                listOfNodes.depness = listOfNodes.depness - 1;
+            }
+            
+            
+            if (node.elementRight != null)
+            {
+                listOfNodes.depness = listOfNodes.depness + 1;
+                printTreeDefinitive(node.elementRight);
+                listOfNodes.depness = listOfNodes.depness - 1;
+            }
+            else
+            {
+                listOfNodes.depness = listOfNodes.depness + 1;
+
+                int h = 0;
+                while (listOfNodes.x == false)
+                {
+                    if (listOfNodes.intListTotal[listOfNodes.depness][h] == null)
+                    {
+                        listOfNodes.intListTotal[listOfNodes.depness][h] = 0;
+                        listOfNodes.x = true;
+                    }
+                    h = h + 1;
+                }
+                listOfNodes.x = false;
+
+                listOfNodes.depness = listOfNodes.depness - 1;
+            }
+
+            //Save depnesss
+            int p = 0;
+            while (listOfNodes.x == false)
+            {
+                if (listOfNodes.intListTotal[listOfNodes.depness][p] == null)
+                {
+                    listOfNodes.intListTotal[listOfNodes.depness][p] = node.data;
+                    listOfNodes.x = true;
+                }
+                p = p + 1;
+
+            }
+            listOfNodes.x = false;
+            
         }
     }
 }
