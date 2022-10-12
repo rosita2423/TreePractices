@@ -30,10 +30,10 @@ namespace TreePactice
         public int diagonalLineSpaces = 0;
         public int arrayPosition = 0;
     }
-    
+
     internal class Node
     {
-        public Nullable <int> data = null;
+        public Nullable<int> data = null;
         public Node elementLeft = null;
         public Node elementRight = null;
         int depnessX;
@@ -102,7 +102,7 @@ namespace TreePactice
         public void Remove()
         {
 
-            if (elementLeft != null) 
+            if (elementLeft != null)
             {
                 elementLeft.Remove();
                 elementLeft = null;
@@ -113,7 +113,7 @@ namespace TreePactice
                 elementRight = null;
             }
             data = null;
-            
+
         }
 
         //Remove a node
@@ -122,12 +122,10 @@ namespace TreePactice
             RemoveDefinitive2(node);
             if (node == this.elementLeft)
             {
-                Console.WriteLine("xdd");
                 elementLeft = null;
             }
             else if (node == this.elementRight)
             {
-                Console.WriteLine("xdd");
                 elementRight = null;
             }
         }
@@ -154,11 +152,11 @@ namespace TreePactice
             {
                 Console.WriteLine("Search result: Yes, there is the node number " + nodeNumber + ".");
             }
-            else 
+            else
             {
                 Console.WriteLine("Search result: Jajajaja there isn't the node number " + nodeNumber + ".");
             }
-            
+
         }
         public Nullable<int> Search(Node node, int nodeNumber)
         {
@@ -246,7 +244,7 @@ namespace TreePactice
             //Print trasnversed tree
             Console.WriteLine();
             Console.Write("Transversed tree: (");
-            for(int i=0;i < listOfNodes.transverseList.Length;i++)
+            for (int i = 0; i < listOfNodes.transverseList.Length; i++)
             {
                 if (listOfNodes.transverseList[i] != null)
                 {
@@ -263,7 +261,7 @@ namespace TreePactice
             Console.Write(")");
             Console.WriteLine();
         }
-        public void Transverse(Node node,string type)
+        public void Transverse(Node node, string type)
         {
             if (node.data == null)
             {
@@ -272,100 +270,60 @@ namespace TreePactice
             //Inorder
             if (type == "inorder")
             {
-                for (int i = 1; i < 4; i++)
+                if (node.elementLeft != null)
                 {
-                    if (i == 1)
+                    Transverse(node.elementLeft, "inorder");
+                }
+                for (int k = 0; k < listOfNodes.transverseList.Length; k++)
+                {
+                    if (listOfNodes.transverseList[k] == null)
                     {
-                        if (node.elementLeft != null)
-                        {
-                            Transverse(node.elementLeft, "inorder");
-                        }
-
+                        listOfNodes.transverseList[k] = node.data;
+                        break;
                     }
-                    else if (i == 2)
-                    {
-                        for (int k = 0; k < listOfNodes.transverseList.Length; k++)
-                        {
-                            if (listOfNodes.transverseList[k] == null)
-                            {
-                                listOfNodes.transverseList[k] = node.data;
-                                break;
-                            }
-                        }
-                    }
-                    else if (i == 3)
-                    {
-                        if (node.elementRight != null)
-                        {
-                            Transverse(node.elementRight,"inorder");
-                        }
-
-                    }
-
+                }
+                if (node.elementRight != null)
+                {
+                    Transverse(node.elementRight, "inorder");
                 }
             }
             //preorder
-            else if(type == "preorder")
+            else if (type == "preorder")
             {
-                for (int i = 1; i < 4;i++)
+                for (int k = 0; k < listOfNodes.transverseList.Length; k++)
                 {
-                    if (i==1)
+                    if (listOfNodes.transverseList[k] == null)
                     {
-                        for (int k = 0; k < listOfNodes.transverseList.Length; k++)
-                        {
-                            if (listOfNodes.transverseList[k] == null)
-                            {
-                                listOfNodes.transverseList[k] = node.data;
-                                break;
-                            }
-                        }
-                    } 
-                    else if (i == 2)
-                    {
-                        if (node.elementLeft != null)
-                        {
-                            Transverse(node.elementLeft, "preorder");
-                        }
-                        
-                    }
-                    else if(i == 3)
-                    {
-                        if(node.elementRight != null)
-                        {
-                            Transverse(node.elementRight, "preorder");
-                        }
+                        listOfNodes.transverseList[k] = node.data;
+                        break;
                     }
                 }
-            } 
-            //postorder
-            else if(type == "postorder")
-            {
-                for (int i = 1; i < 4;i++)
+                if (node.elementLeft != null)
                 {
-                    if (i == 1)
+                    Transverse(node.elementLeft, "preorder");
+                }
+                if (node.elementRight != null)
+                {
+                    Transverse(node.elementRight, "preorder");
+                }
+            }
+            //postorder
+            else if (type == "postorder")
+            {
+                if (node.elementLeft != null)
+                {
+                    Transverse(node.elementLeft, "postorder");
+                }
+                if (node.elementRight != null)
+                {
+                    Transverse(node.elementRight, "postorder");
+                }
+                for (int k = 0; k < listOfNodes.transverseList.Length; k++)
+                {
+                    if (listOfNodes.transverseList[k] == null)
                     {
-                        if (node.elementLeft != null)
-                        {
-                            Transverse(node.elementLeft, "postorder");
-                        }
-                    }
-                    else if(i == 2)
-                    {
-                        if (node.elementRight != null)
-                        {
-                            Transverse(node.elementRight, "postorder");
-                        }
-                    }
-                    else if (i == 3)
-                    {
-                        for (int k = 0; k < listOfNodes.transverseList.Length; k++)
-                        {
-                            if (listOfNodes.transverseList[k] == null)
-                            {
-                                listOfNodes.transverseList[k] = node.data;
-                                break;
-                            }
-                        }
+                        listOfNodes.transverseList[k] = node.data;
+                        break;
                     }
                 }
             }
@@ -374,7 +332,7 @@ namespace TreePactice
         {
             Height(this);
             Console.WriteLine();
-            Console.WriteLine("Your tree have "+ listOfNodes.saveTotal + " levels.");
+            Console.WriteLine("Your tree have " + listOfNodes.saveTotal + " levels.");
         }
         public int HeightWithReturn()
         {
@@ -414,277 +372,7 @@ namespace TreePactice
                 }
             }
         }
-        public void printTree()
-        {
-            Console.WriteLine("      "+this.data+"       ");
-            Console.Write("     ");
-            if (this.elementLeft.data != null)
-            {
-                Console.Write("/");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write(" ");
-            if (this.elementRight.data != null)
-            {
-                Console.Write("\\");
-            }
 
-
-            Console.WriteLine("");
-            Console.Write("    ");
-            if (elementLeft.data != null)
-            {
-                Console.Write(elementLeft.data);
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write("   ");
-            if (elementRight.data != null)
-            {
-                Console.Write(elementRight.data);
-            }
-
-            Console.WriteLine("");
-            Console.Write("   ");
-            if(elementLeft.elementLeft.data != null)
-            {
-                Console.Write("/");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write(" ");
-            if(this.elementLeft.elementRight.data != null)
-            {
-                Console.Write("\\");
-            }
-            Console.Write(" ");
-            if (elementRight.elementLeft.data != null)
-            {
-                Console.Write("/");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write(" ");
-            if (elementRight.elementRight.data != null)
-            {
-                Console.Write("\\");
-            }
-
-            Console.WriteLine();
-            Console.Write("  ");
-            if(elementLeft.elementLeft.data != null)
-            {
-                Console.Write(elementLeft.elementLeft.data);
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write("  ");
-            if(elementLeft.elementRight.data != null)
-            {
-                Console.Write(elementLeft.elementRight.data);
-            }
-            if(elementRight.elementLeft.data != null)
-            {
-                Console.Write(elementRight.elementLeft.data);
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write("   ");
-            if(elementRight.elementRight.data != null)
-            {
-                Console.Write(elementRight.elementRight.data);
-            }
-
-            Console.WriteLine();
-            Console.Write(" ");
-            if(elementLeft.elementLeft.elementLeft.data != null)
-            {
-                Console.Write("/");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write(" ");
-            if(elementLeft.elementLeft.elementRight.data != null)
-            {
-                Console.Write("\\");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write("     ");
-            if (elementRight.elementRight.elementLeft.data != null)
-            {
-                Console.Write("/");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write(" ");
-            if (elementRight.elementRight.elementRight.data != null)
-            {
-                Console.Write("\\");
-            }
-
-            Console.WriteLine("");
-            if(elementLeft.elementLeft.elementLeft.data != null)
-            {
-                Console.Write(elementLeft.elementLeft.elementLeft.data);
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write("   ");
-            if (elementLeft.elementLeft.elementRight.data != null)
-            {
-                Console.Write(elementLeft.elementLeft.elementRight.data);
-            }
-            Console.Write("   ");
-            if(elementRight.elementRight.elementLeft.data != null)
-            {
-                Console.Write(elementRight.elementRight.elementLeft.data);
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-            Console.Write("  ");
-            if (elementRight.elementRight.elementRight.data != null)
-            {
-                Console.Write(elementRight.elementRight.elementRight.data);
-            }
-            //Console.WriteLine("     / \\      ");
-            //Console.WriteLine("    2   3");
-            //Console.WriteLine("   / \\ / \\");
-            //Console.WriteLine("  4");
-            //Console.WriteLine(" /");
-            //Console.WriteLine("6");
-        }
-        public void printTree2()
-        {
-            //Insert the nodes into a list organized by levels.
-            printTree2(this);
-
-            //depness to manage the first spaces of every line.
-            depnessX = -1;
-
-            //Rock "n" roll
-            //Tranverse all the levels (items on list of nodes).
-            for (int i = 0; i < listOfNodes.levels.Length; i++)
-            {
-                
-                //Print all the first spaces in the lines.
-                for (int k = 0; k< HeightWithReturn()+depnessX;k++)
-                {
-                    Console.Write("  ");
-                }
-                
-
-                //Print the nodes of the current level on its respective space.
-                if (listOfNodes.levels[i] != null)
-                {
-                    for (int k = 0; k< listOfNodes.levels[i].Length;k++)
-                    {
-                        Console.Write(listOfNodes.levels[i][k]+" ");
-                    }
-                }
-                Console.WriteLine();
-
-                //
-                for (int l = 0; l < HeightWithReturn()+ depnessX; l++)
-                {
-                    if (l == HeightWithReturn()+depnessX-1)
-                    {
-                        for (int k = 0; k < listOfNodes.levels[l].Length; k++)
-                        {
-                            if(Char.ToString(listOfNodes.levels[l][k]) != " ")
-                            {
-                                //Node node = SearchWithReturn(Char.ToString(listOfNodes.levels[l][k]));
-                                //if (node != null)
-                                //{
-                                //    if (node.elementLeft != null)
-                                //    {
-                                //        Console.Write(" /");
-                                //    }
-                                //    else
-                                //    {
-                                //        Console.Write("  ");
-                                //    }
-
-                                //    if (node.elementRight != null)
-                                //    {
-                                //        Console.Write(" \\");
-                                //    }
-                                //    else
-                                //    {
-                                //        Console.Write("  ");
-                                //    }
-                                //}
-                                
-                            }
-                            
-                        }
-                        
-                    }
-                    else
-                    {
-                        Console.Write("  ");
-                    }
-                }
-                depnessX = depnessX - 1;
-                //depnessX = depnessX - 1;
-                Console.WriteLine();
-            }
-        }
-        public void printTree2(Node node)
-        {
-            if (listOfNodes.left==true)
-            {
-                listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + " ";
-            } else if (listOfNodes.right == true){
-                listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + " ";
-            }
-            listOfNodes.levels[listOfNodes.treeConstant] = listOfNodes.levels[listOfNodes.treeConstant] + node.data;
-            listOfNodes.left = false;
-            listOfNodes.right = false;
-            node.HeightWithReturn();
-            if (node.elementLeft != null)
-            {
-                listOfNodes.treeConstant = listOfNodes.treeConstant + 1;
-                printTree2(node.elementLeft);
-            }
-            else
-            {
-                listOfNodes.left = true;
-            }
-            if (node.elementRight != null)
-            {
-                listOfNodes.treeConstant = listOfNodes.treeConstant + 1;
-                printTree2(node.elementRight);
-            }
-            else
-            {
-                listOfNodes.right = true;
-            }
-            listOfNodes.treeConstant = listOfNodes.treeConstant - 1;
-        }
         public void printTreeDefinitive()
         {
             for (int i = 0; i < HeightWithReturn()+1;i++)
@@ -725,109 +413,8 @@ namespace TreePactice
                 listOfNodes.arrayPosition = 0;
                 listOfNodes.diagonalLineSpaces = listOfNodes.diagonalLineSpaces + 1;
             }
-                /*
-                bool first = true;
-                //This for is transverse the levels
-                for (int level = 0; level< HeightWithReturn(); level++) 
-                {
-
-                    //Print the first spaces
-                    for (int k = 0; k < HeightWithReturn() - listOfNodes.diagonalLineSpaces + 1; k++)
-                    {
-                        Console.Write("  ");
-                    }
-
-
-                    //Print the nodes
-                    //Transverse each node on the level
-                    while (listOfNodes.intListTotal[level][listOfNodes.arrayPosition] != null)
-                    {
-                        //First time
-                        if (first == true)
-                        {
-                            Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition]);
-                            first = false;
-
-                            Console.WriteLine();
-                            Node node = SearchWithReturn(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] ?? default(int));
-
-                            //Print the diagonals
-                            for (int k = 0; k < HeightWithReturn() - listOfNodes.diagonalLineSpaces + 1; k++)
-                            {
-                                if (k == HeightWithReturn())
-                                {
-                                    Console.Write(" ");
-                                }
-                                else
-                                {
-                                    Console.Write("  ");
-                                }
-                            }
-                            if (returning(node,"left") == true)
-                            {
-                                Console.Write("/ ");
-                            }
-                            else
-                            {
-                                Console.Write("  ");
-                            }
-                            if (returning(node, "right") == true)
-                            {
-                                Console.Write("\\");
-                            }
-                            else
-                            {
-                                Console.Write(" ");
-                            }
-
-                        }
-                        else //all times
-                        {
-                            //Node node = SearchWithReturn(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] ?? default(int));
-                            ////if (returning())
-                            //if (returning(node,"left") == true)
-                            //{
-                            //    Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition]);
-                            //}
-                            //else
-                            //{
-                            //    Console.Write("   ");
-                            //}
-                            //if (returning(node,"right")== true)
-                            //{
-
-                            //}
-                            Console.Write(listOfNodes.intListTotal[level][listOfNodes.arrayPosition] + "   ");
-                            //Console.WriteLine();
-                        }
-
-                        listOfNodes.arrayPosition++;
-                    }
-                    listOfNodes.arrayPosition = 0;
-
-                    Console.WriteLine();
-                    listOfNodes.diagonalLineSpaces = listOfNodes.diagonalLineSpaces + 1;
-                }
-
-                for (int i = 0; i < listOfNodes.intListTotal.Count; i++)
-                {
-                    for (int k = 0; k < listOfNodes.intListTotal[i].Length; k++)
-                    {
-                        Console.Write(listOfNodes.intListTotal[i][k]);
-                    }
-                    Console.WriteLine();
-                }
-                */
-            }
-
-        public void printDiagonals(Node node)
-        {
-            Console.WriteLine(node.HeightWithReturn());
-            for (int i = 0; i < node.HeightWithReturn();i++)
-            {
-
-            }
         }
+
         public bool returning(Node node, string side)
         {
             if (side == "right")

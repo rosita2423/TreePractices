@@ -19,6 +19,7 @@ internal class Program
         Node n11 = new Node(11);
         Node n12 = new Node(12);
         Node n13 = new Node(13);
+        Node n14 = new Node(14);
 
         n1.Insert(n2);
         n1.Insert(n3,"right");
@@ -38,15 +39,17 @@ internal class Program
 
         n9.Insert(n12);
 
+        n11.Insert(n14);
+
         n12.Insert(n13, "right");
 
-        n7.Height();
+        n1.RemoveDefinitive(n5);
 
         n1.Transverse("inorder");
 
         n1.Height();
 
-        n1.Search(1);
+        n1.Search(13);
 
         n1.printTreeDefinitive();
 
